@@ -1,0 +1,76 @@
+[[System]]
+>help all | Shows all help categories.
+>help [category] | Shows help for [category].
+>commands | Lists all available commands with no descriptions.
+>info | Shows the bot information page.
+>ping | Tests bot latency.
+---
+[[Moderation]]
+>clear [quantity] | Clears [quantity] messages from channel.
+>wchannel [channel] | Sets the warning channel for the current server.
+>nick [user] [newnick] | Changes the nickname of [user].
+>warn [user] [reason] | Warns the user. [reason] can contain "[here]".
+>unwarn [ID] | Removes warning of [ID = warn message id].
+**Note:** | These commands require special permissions.
+---
+[[Discord]]
+>getmoji [emoji] | Gets image for [emoji = custom emoji]
+>avatar (user) | Shows avatar of (user).
+>davatar (user) | Shows default avatar of (user), calculated from tag.
+>userinfo / >user (user) | Shows info for (user).
+>serveravatar | Shows avatar of current server.
+>server | Shows info for current server.
+>channel (channel) | Shows information for (channel).
+>roles | Lists roles of current server
+>role [role] | Shows info for [role].
+**Note:** | (user) paramaters accept mention, ID, and name.
+---
+[[String]]
+>reverse [string] | Reverses [string].
+>repeat [string] | Sends message containing [string].
+>delay [seconds] [string] | Sends [string] after delay of [seconds].
+>ptc [string] | Prints [string] without formatting.
+>len [string] | Finds length of [string].
+>binary [string] | Converts [string] to binary.
+>ascii [string] | Converts [string] to ASCII codes.
+>b10 [string | Converts [string] to characters.
+>estring [show,print] [string] | Converts [string] to emojis.
+>morse [encode,decode] [string] | Converts [string] to / from Morse Code.
+---
+[[Web]]
+>google [term] | Searches Google for [term].
+>yt [term] | Searches YouTube for [term].
+>define [word] | Searches Dictionary.com for [word].
+>overflow [term] | Searches Stack Overflow for [term].
+---
+>>>
+[[Math]]
+>roll [min] [max] | Rolls a random number from [min] to [max].
+>flip | Flips a coin.
+---
+[[Science]]
+>element [descriptor] | Shows info on element containing [descriptor].
+>apod | Shows the NASA Astronomy Picture of the Day.
+>cb [name] | Shows information for [name] celestial body.
+---
+[[Fun]]
+>cat (arg = fact) | Shows a random cat image or fact. Default: image
+>dog (arg = fact) | Shows a random dog image or fact. Default: image
+>bird (arg = fact) | Shows a random bird image or fact. Default: image
+>fox (arg = fact) | Shows a random fox image or fact. Default: image
+>panda (arg = fact) | Shows a random panda image or fact. Default: image
+>koala (arg = fact) | Shows a random koala image or fact. Default: image
+>kill [user] (weapon) | [user] gets virtually killed.
+>punch [target] | [target] gets virtually punched.
+>8ball [y/n question] | Answers [y/n question].
+---
+[[Gaming]]
+new_command | Coming Soon!
+---
+[[Other]]
+>time | Shows current time and date. (PST, lmk if its local time)
+>poll [syntax] | Creates a poll with [syntax].
+>pollhelp | Shows syntax for >poll.
+---
+>>>
+[[bottom]]
