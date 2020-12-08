@@ -1,0 +1,24 @@
+[user] was electrocuted
+[user] became flattened
+[user] was pushed into the void
+[user] was kicked past the event horizon
+[user] was obliterated
+[user] was assassinated
+[user] was exiled from existence
+[user] was effectively eliminated
+[user] was shot
+[user] was deleted
+[user] was rm -rf-ed
+[user] was sent on a solar escape trajectory
+[user] deleted system32
+[user] forgot the floor was lava
+[user] fell through the floor
+[user] forgot Feather Falling
+[user] forgot Fire Resistance
+[user] inhaled some spicy air
+[user] was immediately incinerated
+[user] experienced a spontaneous self-deconstruction
+[user] experienced a rapid unscheduled disassembly
+[user] crashed into a pole
+[user] was amazingly annihilated.
+[user] was struck by lightning.

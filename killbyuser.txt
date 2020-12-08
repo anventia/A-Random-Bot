@@ -1,0 +1,12 @@
+[user] was shot by [killer]'s sword
+[user] drowned trying to hide from [killer]
+[user] was stabbed by [killer]'s gun
+[user] was incompatible with [killer]
+[user] was assassinated by [killer]
+[user] burnt to a crisp while trying to chase [killer]
+[killer] chased [user] to death
+[user] thought they could outrun [killer], but they were wrong
+[user] lost an unfortunate bet with [killer]
+[user] was pushed into the flames by [killer]
+[user] was stabbed by [killer]
+[killer] decided they didn't like [user].

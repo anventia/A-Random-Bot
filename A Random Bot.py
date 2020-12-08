@@ -15,13 +15,21 @@ import os
 import psutil
 import riotwatcher
 from riotwatcher import LolWatcher, ApiError
-import morsepy
-from morsepy import Morsepy
 
+# Read + write functions
+def read_file(filename):
+    with open(filename, 'r') as f:
+        load = json.load(f)
+    return load
 
+def write_file(dictionary, filename):
+    with open(filename, 'w') as f:
+        json.dump(dictionary, f, indent=4)
+
+# Startup
 print("Declaring Variables...")
 r = " "
-prefix = '>'
+prefix = read_file("config.json")["prefix"]
 bot_icon = "https://cdn.discordapp.com/avatars/521086131132039169/293d65f8ba1ca83c95f0dfb6a1fd240b.png?size=1024"
 exclamation = "https://i.postimg.cc/52Ty19d9/exclamationpoint.png"
 xmark = "https://i.postimg.cc/zDxJ8DTm/xmark.png"
@@ -86,15 +94,6 @@ async def fil(ctx, line):
     await ctx.send(res)
 
 # Functions
-def read_file(filename):
-    with open(filename, 'r') as f:
-        load = json.load(f)
-    return load
-
-def write_file(dictionary, filename):
-    with open(filename, 'w') as f:
-        json.dump(dictionary, f, indent=4)
-
 async def invalidargs(ctx):
     embed = discord.Embed(colour=embedcolour)
     embed.set_author(name="Error: Invalid Arguments.", icon_url=xmark)
@@ -363,7 +362,7 @@ async def warnchannel(ctx, chan = "None"):
     if any(c in chan for c in "<#>") and len(chan) == 21:
         pass
     else:
-        print("invalid channel")
+        #print("invalid channel")
         await senderror(ctx, "Error: Invalid Channel!")
         return
 
@@ -443,7 +442,7 @@ async def warns(ctx, user:discord.Member):
 @has_permissions(administrator=True)
 @bot.command(aliases=["uwarn"])
 async def unwarn(ctx, id):
-    print("ki")
+    #print("ki")
     config = read_file("warnconfig.txt")
     server = str(ctx.guild.id)
     warnchannel = config[server]["channel"]
@@ -573,7 +572,7 @@ async def userinfo(ctx, *, user: discord.Member):
         usertype = "Human"
 
     status = user.status
-    print(status)
+    #print(status)
     if status == discord.Status.online:
         print("online")
     status = str(status).capitalize()
@@ -833,7 +832,7 @@ async def roleinfo(ctx, role: discord.Role):
     roleid = role.id
     permissions = role._permissions
     permissions = discord.Permissions(permissions=permissions)
-    print(members)
+    #print(members)
 
     i = iter(permissions)
     res = "None"
@@ -989,16 +988,40 @@ async def estring(ctx, type, *, arg = "no"):
 
 @bot.command(name="morse")
 async def morse(ctx, arg, *, input):
-    input = input.lower()
+    input = input.upper()
     if not arg:
         await senderror(ctx, "Error: Please specify 'encode' or 'decode'!")
         return
+
+    morse = read_file("morse.json")
+    morse_decrypt = {v: k for k, v in morse["encrypt"].items()}
+
+    result = ""
+
     if arg == "encode":
-        result = Morsepy.encrypt(input)
+        for i in input.split(" "):  # For each word
+            for j in i:  # For each letter in word
+                if j == "\n":
+                    result += "\n"
+                else:
+                    result += morse["encrypt"][j] + " "
+            result += "/ "
+        result += "end"
+        result = result.replace(" / end","")
     elif arg == "decode":
-        result = Morsepy.decrypt(input)
+        for i in input.split(" / "):  # For each word
+            print(i)
+            for j in i.split(" "):  # For each letter in word
+                print(j)
+                if j == "\n":
+                    result += "\n"
+                else:
+                    result += morse_decrypt[j]
+            result += " "
+        result += "end"
+        result = result.replace(" end", "")
     embed = discord.Embed(colour=embedcolour)
-    embed.add_field(name="Original:", value=f"```{input}```", inline=False)
+    embed.add_field(name="Original:", value=f"```{input.lower()}```", inline=False)
     embed.add_field(name="Converted:", value=f"```{result}```", inline=False)
     await ctx.send(embed=embed)
 
@@ -1443,7 +1466,7 @@ async def summoner(ctx, name):
     for match in reversed(data4["matches"]):  # Check each game/match
         gameID = match["gameId"]
         matchcount += 1
-        print(matchcount)
+        #print(matchcount)
         #await ctx.send("ki1")
         data5 = watcher.match.by_id(region, gameID)  # Game Information
         #await ctx.send("ki2")
@@ -1598,5 +1621,5 @@ async def rst(ctx):
     await ctx.send(embed=embed)
 
 data = read_file("config.json")
-token = data["token"]
+token = data["testtoken"]
 bot.run(token)
