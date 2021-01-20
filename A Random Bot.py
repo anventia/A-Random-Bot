@@ -1599,16 +1599,6 @@ async def error(ctx):
 async def rp(ctx, *, arg):
     await ctx.send('$'+arg)
 
-@bot.command(name='hax')  # hacks Bill's bot [FIXED]
-async def hax(ctx, member, amount):
-    await ctx.send("$capture <@519326187491950593>")
-    await ctx.send("$daily")
-    await ctx.send("$weekly")
-    await asyncio.sleep(0.5)
-    await ctx.send("$give {} {}".format(member, amount))
-    await ctx.send('$work')
-    await ctx.send("$capture <@519326187491950593>")
-
 @bot.command(name="rst")
 async def rst(ctx):
     f = open("squaretwitters.txt", "r")
