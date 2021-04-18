@@ -10,7 +10,7 @@
 >wchannel [channel] | Sets the warning channel for the current server.
 >nick [user] [newnick] | Changes the nickname of [user].
 >warn [user] [reason] | Warns the user. [reason] can contain "[here]".
->unwarn [ID] | Removes warning of [ID = warn message id].
+>unwarn [ID] | Removes warning of [ID = warn message by the bot].
 **Note:** | These commands require special permissions.
 ---
 [[Discord]]
@@ -71,6 +71,9 @@ new_command | Coming Soon!
 >time | Shows current time and date. (PST, lmk if its local time)
 >poll [syntax] | Creates a poll with [syntax].
 >pollhelp | Shows syntax for >poll.
+>qchannel | Sets the quotes channel for the server.
+>quote [ID] | Quotes message [ID].
+>uquote [ID] | Removes quote [ID = quote message by the bot].
 ---
 >>>
 [[bottom]]

@@ -45,11 +45,12 @@ xmarkmoji = "<:xmark_round:732374828505497661>"
 checkmarkmoji = "<:checkmark_round:732374828551634986>"
 upvotemoji = "<:upvote_r:749455616128450642>"
 downvotemoji = "<:downvote_r:749456269995278457>"
+v1 = "\u200b"
 
 print("Starting up...")
 @bot.event  # Startup
 async def on_ready():
-    await bot.change_presence(activity=discord.Activity(name="for commands | >help", type=discord.ActivityType.watching))
+    await bot.change_presence(activity=discord.Activity(name="for commands | >>help", type=discord.ActivityType.watching))
     print('Status Updated')
     print('Logged in as {0.user}'.format(bot))
 
@@ -338,9 +339,16 @@ async def warnchannel(ctx, chan = "None"):
     if server not in config:  # If server doesn't exist yet
         config[server] = dict()
     else:
-        if chan == config[server]["channel"]:
-            await senderror(ctx, "Error: That channel is already set!")
+        if chan == "None":
+            if "channel" not in config[server]:
+                currentchannel = "No warning channel has been set yet!"
+            else:
+                currentchannel = config[server]["channel"]
+            embed = discord.Embed(colour=embedcolour, description=currentchannel)
+            embed.set_author(name="Current warning channel:", icon_url=bsquare)
+            await ctx.send(embed=embed)
             return
+
     if chan == "None":
         if "channel" not in config[server]:
             currentchannel = "No warning channel has been set yet!"
@@ -350,11 +358,15 @@ async def warnchannel(ctx, chan = "None"):
         embed.set_author(name="Current warning channel:", icon_url=bsquare)
         await ctx.send(embed=embed)
         return
+
     if "channel" not in config[server]:  # If channel doesn't exist yet
         config[server]["channel"] = dict()
         oldchannel = "None"
     else:
         oldchannel = config[server]["channel"]
+        if chan == config[server]["channel"]:
+            await senderror(ctx, "Error: That channel is already set!")
+            return
     config[server]["channel"] = chan
     if "name" not in config[server]:  # If channel doesn't exist yet
         config[server]["name"] = dict()
@@ -421,7 +433,7 @@ async def warn(ctx, user: discord.Member = "None", *, reason = "None"):
         return
     embed = discord.Embed(colour=embedcolour)
     embed.set_author(name="User has been warned.", icon_url=checkmark)
-    embed.set_footer(text=f"{user} now has {int(num)+1} warnings.", icon_url=user.avatar_url)
+    embed.add_field(name=v1, value=f"<@{user.id}> now has {int(num)+1} warnings.")
     await ctx.send(embed=embed)
     write_file(config, "warnconfig.txt")
 
@@ -470,7 +482,7 @@ async def unwarn(ctx, id):
     write_file(config, "warnconfig.txt")
     embed = discord.Embed(colour=embedcolour)
     embed.set_author(name="Successfully removed warning.", icon_url=checkmark)
-    embed.set_footer(text=f"{user} now has {num2} warnings.")
+    embed.add_field(name=v1, value=f"<@{user.id}> now has {num2} warnings.")
     await ctx.send(embed=embed)
 
 @unwarn.error
@@ -1552,6 +1564,151 @@ async def pollinfo(ctx):
     await msg.add_reaction(checkmarkmoji)
     await msg.add_reaction(xmarkmoji)
 
+@has_permissions(administrator=True)
+@bot.command(aliases=["qchannel"])
+async def quotechannel(ctx, chan = "None"):
+    config = read_file("warnconfig.txt")
+    server = str(ctx.guild.id)
+    if server not in config:  # If server doesn't exist yet
+        config[server] = dict()
+        print("Ki")
+    else:
+        if chan == "None":
+            if "quote_channel" not in config[server]:
+                currentchannel = "No quotes channel has been set yet!"
+            else:
+                currentchannel = config[server]["quote_channel"]
+            embed = discord.Embed(colour=embedcolour, description=currentchannel)
+            embed.set_author(name="Current quotes channel:", icon_url=bsquare)
+            await ctx.send(embed=embed)
+            return
+
+    if chan == "None":
+        if "quote_channel" not in config[server]:
+            currentchannel = "No quotes channel has been set yet!"
+        else:
+            currentchannel = config[server]["quote_channel"]
+        embed = discord.Embed(colour=embedcolour, description=currentchannel)
+        embed.set_author(name="Current quotes channel:", icon_url=bsquare)
+        await ctx.send(embed=embed)
+        return
+
+    if "quote_channel" not in config[server]:  # If channel doesn't exist yet
+        config[server]["quote_channel"] = dict()
+        oldchannel = "None"
+    else:
+        oldchannel = config[server]["quote_channel"]
+        if chan == config[server]["quote_channel"]:
+            await senderror(ctx, "Error: That channel is already set!")
+            return
+    config[server]["quote_channel"] = chan
+    if "name" not in config[server]:  # If channel doesn't exist yet
+        config[server]["name"] = dict()
+        config[server]["name"] = ctx.guild.name
+    if any(c in chan for c in "<#>") and len(chan) == 21:
+        pass
+    else:
+        #print("invalid channel")
+        await senderror(ctx, "Error: Invalid Channel!")
+        return
+
+    embed=discord.Embed(colour=embedcolour, description=f"Old Channel: {oldchannel}\nNew Channel: {chan}")
+    embed.set_author(name="Server Quotes Channel has been updated.", icon_url=checkmark)
+    await ctx.send(embed=embed)
+    write_file(config, "warnconfig.txt")
+
+@quotechannel.error
+async def quotechannel_error(ctx, error):
+    if isinstance(error, CheckFailure):
+        embed = discord.Embed(colour=embedcolour)
+        embed.set_author(name="You are missing the Administrator permission!", icon_url=xmark)
+        await ctx.send(embed=embed)
+
+@bot.command(name="quote")
+async def quote(ctx, id: discord.Message = "None"):
+    if id == "None":
+        await invalidargs(ctx)
+        return
+    user = id.author
+    config = read_file("warnconfig.txt")
+    server = str(ctx.guild.id)
+    if server not in config:
+        embed = discord.Embed(colour=embedcolour)
+        embed.set_author(name="Error: No warning channel found!\nSet it with >wchannel [channel]!", icon_url=xmark)
+        await ctx.send(embed=embed)
+        return
+    v1="\u200b"
+    userid = str(user.id)
+    if userid not in config[server]:
+        config[server][userid] = dict()
+        config[server][userid]["warnings"] = 0
+        config[server][userid]["quotes"] = 0
+        config[server][userid]["name"] = dict()
+        config[server][userid]["name"] = str(user)
+    config[server][userid]["name"] = str(user)
+    num = config[server][userid]["quotes"]
+    config[server][userid]["quotes"] = int(num) + 1
+    num2 = config[server][userid]["quotes"]  # New number
+    channelID = config[server]["quote_channel"]
+    channel = bot.get_channel(int(channelID.replace("<", "").replace(">", "").replace("#", "")))
+    embed = discord.Embed(colour=embedcolour)
+    embed.set_thumbnail(url=user.avatar_url)
+    embed.set_author(name=f"Quote #{num2}", icon_url=checkmark)
+    embed.add_field(name=v1, value=f"> {id.content}", inline=False)
+    embed.add_field(name=v1, value=f"- <@!{id.author.id}>", inline=False)
+    embed.add_field(name="Channel:", value=f"<#{id.channel.id}>\n{id.jump_url}", inline=True)
+    embed.add_field(name="Quoted by:", value=f"<@{ctx.author.id}>", inline=True)
+    try:
+        await channel.send(embed=embed)
+    except:
+        await senderror(ctx, "Error: The bot cannot send messages in the selected warning channel!\nChange it with `>warnc [channel]` or give the bot permissions!")
+        return
+    embed = discord.Embed(colour=embedcolour)
+    embed.set_author(name="User has been quoted!", icon_url=checkmark)
+    embed.add_field(name=v1, value=f"<@{user.id}> now has {int(num)+1} quotes.")
+    await ctx.send(embed=embed)
+    write_file(config, "warnconfig.txt")
+
+@bot.command(aliases=["uquote"])
+async def unquote(ctx, id: discord.Message = "None"):
+    author = id.embeds[0].fields[3].value  # Gets the author of the quote
+    if f"<@{ctx.author.id}>" == author:  # If the author of the quote matches user trying to remove
+        pass  # Good!
+    else:
+        await senderror(ctx, "You may not remove other people's quotes!")
+        return
+
+    config = read_file("warnconfig.txt")
+    server = str(ctx.guild.id)
+    quotechannel = config[server]["quote_channel"]
+    quotechannel = quotechannel.replace("<", "").replace(">", "").replace("#", "") # Turns channel from <#12345> to 12345
+    quotechannelget = await bot.fetch_channel(int(quotechannel))
+    try:
+        msg = await quotechannelget.fetch_message(id)
+    except:
+        chanList = ctx.guild.channels
+        for channel in chanList:
+            try:
+                msg = await channel.fetch_message(id)
+                break
+            except:
+                continue
+
+    embeds = id.embeds
+    user = embeds[0].fields[1].value
+    userid = str(user).replace("<", "").replace("@", "").replace(">", "").replace("- ", "").replace("!", "")
+    config = read_file("warnconfig.txt")
+    num = config[server][userid]["quotes"]
+    config[server][userid]["quotes"] = int(num) - 1
+    num2 = config[server][userid]["quotes"]  # New number
+    await id.delete()
+    write_file(config, "warnconfig.txt")
+    embed = discord.Embed(colour=embedcolour)
+    embed.set_author(name="Successfully removed quote.", icon_url=checkmark)
+    embed.add_field(name=v1, value=f"{user.replace('- ', '')} now has {num2} quotes.")
+    await ctx.send(embed=embed)
+
+
 @bot.command(name="makepoll")
 async def makepoll(ctx, id):
     msg = await ctx.channel.fetch_message(id)
@@ -1599,6 +1756,16 @@ async def error(ctx):
 async def rp(ctx, *, arg):
     await ctx.send('$'+arg)
 
+@bot.command(name='hax')  # hacks Bill's bot [FIXED]
+async def hax(ctx, member, amount):
+    await ctx.send("$capture <@519326187491950593>")
+    await ctx.send("$daily")
+    await ctx.send("$weekly")
+    await asyncio.sleep(0.5)
+    await ctx.send("$give {} {}".format(member, amount))
+    await ctx.send('$work')
+    await ctx.send("$capture <@519326187491950593>")
+
 @bot.command(name="rst")
 async def rst(ctx):
     f = open("squaretwitters.txt", "r")
@@ -1611,5 +1778,5 @@ async def rst(ctx):
     await ctx.send(embed=embed)
 
 data = read_file("config.json")
-token = data["testtoken"]
+token = data["token"]
 bot.run(token)
