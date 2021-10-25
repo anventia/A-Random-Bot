@@ -50,7 +50,7 @@ v1 = "\u200b"
 print("Starting up...")
 @bot.event  # Startup
 async def on_ready():
-    await bot.change_presence(activity=discord.Activity(name="for commands | >>help", type=discord.ActivityType.watching))
+    await bot.change_presence(activity=discord.Activity(name="for commands | >help", type=discord.ActivityType.watching))
     print('Status Updated')
     print('Logged in as {0.user}'.format(bot))
 
@@ -798,42 +798,73 @@ async def serverroles(ctx):
     f1 = f1.split("\n")
     admin = admin.split("\n")
     assignments = assignments.split("\n")
-    f1_1 = ""
-    f1_2 = ""
-    admin_1 = ""
-    admin_2 = ""
+    f1_1 = "\u200b"
+    f1_2 = "\u200b"
+    f1_3 = "\u200b"
+    f1_4 = "\u200b"
+    admin_1 = "\u200b"
+    admin_2 = "\u200b"
+    admin_3 = "\u200b"
+    admin_4 = "\u200b"
     assignments_1 = ""
     assignments_2 = ""
+    assignments_3 = ""
+    assignments_4 = ""
     i = 0
     while i < len(f1):
-        if i < 35:
+        if i < 30:
             f1_1 = f1_1 + f1[i] + "\n"
             admin_1 = admin_1 + admin[i] + "\n"
             assignments_1 = assignments_1 + assignments[i] + "\n"
-        else:
+        elif i < 60:
             f1_2 = f1_2 + f1[i] + "\n"
             admin_2 = admin_2 + admin[i] + "\n"
             assignments_2 = assignments_2 + assignments[i] + "\n"
+        elif i < 90:
+            f1_3 = f1_3 + f1[i] + "\n"
+            admin_3 = admin_3 + admin[i] + "\n"
+            assignments_3 = assignments_3 + assignments[i] + "\n"
+        else:
+            f1_4 = f1_4 + f1[i] + "\n"
+            admin_4 = admin_4 + admin[i] + "\n"
+            assignments_4 = assignments_4 + assignments[i] + "\n"
         i += 1
 
 
-        
+
     v1 = "\u200b"
     embed = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
-
     embed.add_field(name="Normal Roles:", value=f1_1)
     embed.add_field(name=v1, value=v1)
     embed.add_field(name="Admin?", value=admin_1)
+    await ctx.send(embed=embed)
 
-    embed.add_field(name=v1, value=f1_2)
-    embed.add_field(name=v1, value=v1)
-    embed.add_field(name=v1, value=admin_2)
+    if f1_2 != "\u200b":
+        embed = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
+        embed.add_field(name="Normal Roles:", value=f1_2)
+        embed.add_field(name=v1, value=v1)
+        embed.add_field(name="Admin?", value=admin_2)
+        await ctx.send(embed=embed)
+
+    if f1_3 != "\u200b":
+        embed = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
+        embed.add_field(name="Normal Roles:", value=f1_3)
+        embed.add_field(name=v1, value=v1)
+        embed.add_field(name="Admin?", value=admin_3)
+        await ctx.send(embed=embed)
+
+    if f1_4 != "\u200b":
+        embed = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
+        embed.add_field(name="Normal Roles:", value=f1_4)
+        embed.add_field(name=v1, value=v1)
+        embed.add_field(name="Admin?", value=admin_4)
+        await ctx.send(embed=embed)
+
 
     embed2 = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
     embed2.add_field(name="Managed Roles:", value=f2)
     embed2.add_field(name=v1, value=v1)
     embed2.add_field(name="Admin?", value=admin2)
-    await ctx.send(embed=embed)
     await ctx.send(embed=embed2)
 
 @bot.command(aliases=["role"])
@@ -1325,7 +1356,7 @@ async def bird(ctx, arg = "None"):
     else:
         embed = discord.Embed(colour=embedcolour, description="**Invalid argument!**\n`[leave blank]` : Image\n`fact` : Fact")
         await ctx.send(embed=embed)
-        
+
 @bot.command(name="fox")
 async def fox(ctx, arg = "None"):
     if arg.capitalize() == "F":
@@ -1346,7 +1377,7 @@ async def fox(ctx, arg = "None"):
     else:
         embed = discord.Embed(colour=embedcolour, description="**Invalid argument!**\n`[leave blank]` : Image\n`fact` : Fact")
         await ctx.send(embed=embed)
-        
+
 @bot.command(name="panda")
 async def panda(ctx, arg = "None"):
     if arg.capitalize() == "F":
@@ -1755,16 +1786,6 @@ async def error(ctx):
 @bot.command(name='rp')
 async def rp(ctx, *, arg):
     await ctx.send('$'+arg)
-
-@bot.command(name='hax')  # hacks Bill's bot [FIXED]
-async def hax(ctx, member, amount):
-    await ctx.send("$capture <@519326187491950593>")
-    await ctx.send("$daily")
-    await ctx.send("$weekly")
-    await asyncio.sleep(0.5)
-    await ctx.send("$give {} {}".format(member, amount))
-    await ctx.send('$work')
-    await ctx.send("$capture <@519326187491950593>")
 
 @bot.command(name="rst")
 async def rst(ctx):
