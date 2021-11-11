@@ -798,68 +798,28 @@ async def serverroles(ctx):
     f1 = f1.split("\n")
     admin = admin.split("\n")
     assignments = assignments.split("\n")
-    f1_1 = "\u200b"
-    f1_2 = "\u200b"
-    f1_3 = "\u200b"
-    f1_4 = "\u200b"
-    admin_1 = "\u200b"
-    admin_2 = "\u200b"
-    admin_3 = "\u200b"
-    admin_4 = "\u200b"
-    assignments_1 = ""
-    assignments_2 = ""
-    assignments_3 = ""
-    assignments_4 = ""
+
+    j = 1
     i = 0
-    while i < len(f1):
-        if i < 30:
+    while j <= math.ceil((len(f1))/30)+1:
+        f1_1 = "\u200b"
+        admin_1 = "\u200b"
+        assignments_1 = ""
+        while i < 30*j:
             f1_1 = f1_1 + f1[i] + "\n"
             admin_1 = admin_1 + admin[i] + "\n"
             assignments_1 = assignments_1 + assignments[i] + "\n"
-        elif i < 60:
-            f1_2 = f1_2 + f1[i] + "\n"
-            admin_2 = admin_2 + admin[i] + "\n"
-            assignments_2 = assignments_2 + assignments[i] + "\n"
-        elif i < 90:
-            f1_3 = f1_3 + f1[i] + "\n"
-            admin_3 = admin_3 + admin[i] + "\n"
-            assignments_3 = assignments_3 + assignments[i] + "\n"
-        else:
-            f1_4 = f1_4 + f1[i] + "\n"
-            admin_4 = admin_4 + admin[i] + "\n"
-            assignments_4 = assignments_4 + assignments[i] + "\n"
-        i += 1
+            i += 1
+            if i >= len(f1): break
 
-
-
-    v1 = "\u200b"
-    embed = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
-    embed.add_field(name="Normal Roles:", value=f1_1)
-    embed.add_field(name=v1, value=v1)
-    embed.add_field(name="Admin?", value=admin_1)
-    await ctx.send(embed=embed)
-
-    if f1_2 != "\u200b":
+        v1 = "\u200b"
         embed = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
-        embed.add_field(name="Normal Roles:", value=f1_2)
+        embed.add_field(name="Normal Roles:", value=f1_1)
         embed.add_field(name=v1, value=v1)
-        embed.add_field(name="Admin?", value=admin_2)
+        embed.add_field(name="Admin?", value=admin_1)
         await ctx.send(embed=embed)
-
-    if f1_3 != "\u200b":
-        embed = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
-        embed.add_field(name="Normal Roles:", value=f1_3)
-        embed.add_field(name=v1, value=v1)
-        embed.add_field(name="Admin?", value=admin_3)
-        await ctx.send(embed=embed)
-
-    if f1_4 != "\u200b":
-        embed = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
-        embed.add_field(name="Normal Roles:", value=f1_4)
-        embed.add_field(name=v1, value=v1)
-        embed.add_field(name="Admin?", value=admin_4)
-        await ctx.send(embed=embed)
-
+        if i >= len(f1): break
+        j += 1
 
     embed2 = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
     embed2.add_field(name="Managed Roles:", value=f2)
