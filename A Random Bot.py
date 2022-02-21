@@ -758,7 +758,11 @@ async def channelinfo(ctx, chan:discord.TextChannel="None"):
 
 @bot.command(aliases=["roles", "rolelist"])  # Server role list
 async def serverroles(ctx):
-    roles = ctx.guild.roles
+    
+    #await ctx.send("This command is temporarily disabled! A fix is coming soon!\n`>info` for support server.")
+    #return
+    
+    roles = ctx.guild.roles[::-1]
     name = ctx.guild.name
     admin = " "
     admin2 = " "
@@ -768,28 +772,33 @@ async def serverroles(ctx):
     assignments2 = " "
     count = 1
     for i in roles:
+        memoryUsage = psutil.virtual_memory()[2]
+        if memoryUsage > 20:
+            await ctx.send("Note: This server has too many roles to display all of them here!")
+            break
+        
         if i.permissions.administrator:
             if i.managed:
-                admin2 = "Yes" + "\n" + admin2
+                admin2 = admin2 + "Yes" + "\n"
             else:
-                admin = "Yes" + "\n" + admin
+                admin = admin + "Yes" + "\n"
         else:
             if i.managed:
-                admin2 = "No" + "\n" + admin2
+                admin2 = admin2 + "No" + "\n"
             else:
-                admin = "No" + "\n" + admin
+                admin = admin + "No" + "\n"
         if i.name == "@everyone":
-            f1 = "@everyone" + "" \
-                               "\n" + f1
+            f1 = f1 + "@everyone" + "" \
+                               "\n"
         else:
             if i.managed:
-                f2 = "<@&" + str(i.id) + ">\n" + f2
+                f2 = f2 + "<@&" + str(i.id) + ">\n" 
             else:
-                f1 = "<@&" + str(i.id) + ">\n" + f1
+                f1 = f1 + "<@&" + str(i.id) + ">\n"
         if i.managed:
             assignments2 = assignments2 + "\n" + assignments2
         else:
-            assignments = str(len(i.members)) + "\n" + assignments
+            assignments = assignments + str(len(i.members)) + "\n"
         count = count + 1
         if count > len(roles):
             break
@@ -821,11 +830,11 @@ async def serverroles(ctx):
         if i >= len(f1): break
         j += 1
 
-    embed2 = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
-    embed2.add_field(name="Managed Roles:", value=f2)
-    embed2.add_field(name=v1, value=v1)
-    embed2.add_field(name="Admin?", value=admin2)
-    await ctx.send(embed=embed2)
+    #embed2 = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
+    #embed2.add_field(name="Managed Roles:", value=f2)
+    #embed2.add_field(name=v1, value=v1)
+    #embed2.add_field(name="Admin?", value=admin2)
+    #await ctx.send(embed=embed2)
 
 @bot.command(aliases=["role"])
 async def roleinfo(ctx, role: discord.Role):
