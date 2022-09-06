@@ -661,7 +661,7 @@ async def serveravatar(ctx):
 @bot.command(aliases=["server"])  # Server info command.
 async def serverinfo(ctx):
     name = ctx.guild.name
-    link = ctx.guild.icon_url
+    link = ctx.guild.icon
     members = ctx.guild.member_count
     owner = ctx.guild.owner_id
     emojis = ctx.guild.emojis
@@ -684,14 +684,14 @@ async def serverinfo(ctx):
 
     a1 = 0
     count = 1
-    for i in ctx.guild.members: # Gets names of administrators.
-        if i.permissions_in(ctx.channel).administrator:
-            if not i.bot:
-                if not i.id == owner:
-                    a1 = str(a1) + ", " + str(i.id)
-        count = count + 1
-        if count > int(members):
-            break
+    #for i in ctx.guild.members: # Gets names of administrators.
+        #if i.Permissions(ctx.channel).administrator:
+            #if not i.bot:
+                #if not i.id == owner:
+                    #a1 = str(a1) + ", " + str(i.id)
+        #count = count + 1
+        #if count > int(members):
+            #break
     if not isinstance(a1, int):
         admins = a1.split(", ")
         admincounter = 1
@@ -700,7 +700,8 @@ async def serverinfo(ctx):
             list = list + "<@" + admins[admincounter] + ">" + "\n"
             admincounter = admincounter + 1
     else:
-        list = "None"
+        list = "Feature broken :("
+
 
     v1 = '\u200b'
     v2 = '\u200b'
@@ -758,11 +759,7 @@ async def channelinfo(ctx, chan:discord.TextChannel="None"):
 
 @bot.command(aliases=["roles", "rolelist"])  # Server role list
 async def serverroles(ctx):
-    
-    #await ctx.send("This command is temporarily disabled! A fix is coming soon!\n`>info` for support server.")
-    #return
-    
-    roles = ctx.guild.roles[::-1]
+    roles = ctx.guild.roles
     name = ctx.guild.name
     admin = " "
     admin2 = " "
@@ -772,33 +769,28 @@ async def serverroles(ctx):
     assignments2 = " "
     count = 1
     for i in roles:
-        memoryUsage = psutil.virtual_memory()[2]
-        if memoryUsage > 20:
-            await ctx.send("Note: This server has too many roles to display all of them here!")
-            break
-        
         if i.permissions.administrator:
             if i.managed:
-                admin2 = admin2 + "Yes" + "\n"
+                admin2 = "Yes" + "\n" + admin2
             else:
-                admin = admin + "Yes" + "\n"
+                admin = "Yes" + "\n" + admin
         else:
             if i.managed:
-                admin2 = admin2 + "No" + "\n"
+                admin2 = "No" + "\n" + admin2
             else:
-                admin = admin + "No" + "\n"
+                admin = "No" + "\n" + admin
         if i.name == "@everyone":
-            f1 = f1 + "@everyone" + "" \
-                               "\n"
+            f1 = "@everyone" + "" \
+                               "\n" + f1
         else:
             if i.managed:
-                f2 = f2 + "<@&" + str(i.id) + ">\n" 
+                f2 = "<@&" + str(i.id) + ">\n" + f2
             else:
-                f1 = f1 + "<@&" + str(i.id) + ">\n"
+                f1 = "<@&" + str(i.id) + ">\n" + f1
         if i.managed:
             assignments2 = assignments2 + "\n" + assignments2
         else:
-            assignments = assignments + str(len(i.members)) + "\n"
+            assignments = str(len(i.members)) + "\n" + assignments
         count = count + 1
         if count > len(roles):
             break
@@ -830,11 +822,11 @@ async def serverroles(ctx):
         if i >= len(f1): break
         j += 1
 
-    #embed2 = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
-    #embed2.add_field(name="Managed Roles:", value=f2)
-    #embed2.add_field(name=v1, value=v1)
-    #embed2.add_field(name="Admin?", value=admin2)
-    #await ctx.send(embed=embed2)
+    embed2 = discord.Embed(color=embedcolour, title="List of roles for *{}*".format(name))
+    embed2.add_field(name="Managed Roles:", value=f2)
+    embed2.add_field(name=v1, value=v1)
+    embed2.add_field(name="Admin?", value=admin2)
+    await ctx.send(embed=embed2)
 
 @bot.command(aliases=["role"])
 async def roleinfo(ctx, role: discord.Role):
