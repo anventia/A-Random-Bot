@@ -1,4 +1,4 @@
-Multi-Purpose Discord Bot!
+A Multi-Purpose Discord bot programmed using discord.py.
 
 [Information Page](https://top.gg/bot/521086131132039169)
 
